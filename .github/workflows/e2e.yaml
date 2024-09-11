@@ -18,14 +18,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test Run
-        id: test-run
+      - name: Test STDOUT
+        id: test-stdout
         uses: ./
         with:
-          placeholder: "test_placeholder"
+          run: |
+            echo "test"
+            echo "test2"
 
-      - name: Assert placeholder
+      - name: Assert stdout
         uses: nick-fields/assert-action@v2
         with:
-          actual: ${{ steps.test-run.outputs.placeholder }}
-          expected: "test_placeholder"
+          actual: ${{ steps.test-stdout.outputs.stdout }}
+          expected: "test\ntest2"
+
+      - name: Test STDERR
+        id: test-stderr
+        uses: ./
+        with:
+          run: |
+            echo "test" 1>&2
+            echo "test2" 1>&2
+
+      - name: Assert stderr
+        uses: nick-fields/assert-action@v2
+        with:
+          actual: ${{ steps.test-stderr.outputs.stderr }}
+          expected: "test\ntest2"

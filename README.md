@@ -3,27 +3,39 @@
 [![CI](https://github.com/ovsds/run-with-output-action/workflows/Check%20PR/badge.svg)](https://github.com/ovsds/run-with-output-action/actions?query=workflow%3A%22%22Check+PR%22%22)
 [![GitHub Marketplace](https://img.shields.io/badge/Marketplace-Run%20with%20Output-blue.svg)](https://github.com/marketplace/actions/run-with-output)
 
-Run with Output Action
+Runs a command with stdout/stderr returned as an output.
+Useful for running commands and using their output in subsequent steps.
+Supports multiline commands and outputs.
 
 ## Usage
 
 ### Example
 
 ```yaml
-placeholder # TODO: Add example
+- name: Run with Output
+  uses: ovsds/run-with-output-action@v1
+  with:
+    run: |
+      echo "Hello, World!"
+      echo "Hello, World!" >&2
+      echo "Hello, again!"
+
+- name: Use Output
+  run: echo "${{ steps.run.outputs.stdout }}"
 ```
 
 ### Action Inputs
 
-| Name          | Description  | Default |
-| ------------- | ------------ | ------- |
-| `placeholder` | Placeholder. |         |
+| Name  | Description     | Default |
+| ----- | --------------- | ------- |
+| `run` | Command to run. |         |
 
 ### Action Outputs
 
-| Name          | Description  |
-| ------------- | ------------ |
-| `placeholder` | Placeholder. |
+| Name     | Description                     |
+| -------- | ------------------------------- |
+| `stdour` | Standard output of the command. |
+| `stderr` | Standard error of the command.  |
 
 ## Development
 

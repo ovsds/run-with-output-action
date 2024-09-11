@@ -2,26 +2,49 @@ name: "Run with Output"
 description: "Run with Output Action"
 
 inputs:
-  placeholder:
-    description: "Placeholder input to be replaced by real inputs"
+  run:
+    description: "Command to run"
     required: true
-    default: "placeholder"
 
 outputs:
-  placeholder:
-    description: "Placeholder output to be replaced by real outputs"
-    value: ${{steps.placeholder.outputs.placeholder }}
+  stdout:
+    description: "Standard output of the command"
+    value: ${{ steps.run.outputs.stdout }}
+
+  stderr:
+    description: "Standard error of the command"
+    value: ${{ steps.run.outputs.stderr }}
 
 runs:
   using: "composite"
   steps:
-    - name: Placeholder
-      id: placeholder
+    - name: Run
+      id: run
       shell: bash
       run: |
-        echo "::set-output name=placeholder::${{ inputs.placeholder }}"
+        {
+          IFS=$'\n' read -r -d '' CAPTURED_STDOUT;
+          IFS=$'\n' read -r -d '' CAPTURED_STDERR;
+        } < <((printf '\0%s\0' "$(({
+        ${{ inputs.run }}
+        } | tr -d '\0') 3>&1- 1>&2- 2>&3- | tr -d '\0')" 1>&2) 2>&1)
 
-# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#branding
+        echo "stdout:"
+        echo "$CAPTURED_STDOUT"
+        {
+          echo "stdout<<EOF"
+          echo "$CAPTURED_STDOUT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+        echo "stderr:"
+        echo "$CAPTURED_STDERR"
+        {
+          echo "stderr<<EOF"
+          echo "$CAPTURED_STDERR"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
 branding:
-  icon: "message-square"
+  icon: "terminal"
   color: "gray-dark"
