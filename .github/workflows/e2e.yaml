@@ -30,7 +30,9 @@ jobs:
         uses: nick-fields/assert-action@v2
         with:
           actual: ${{ steps.test-stdout.outputs.stdout }}
-          expected: "test\ntest2"
+          expected: |
+            test
+            test2
 
       - name: Test STDERR
         id: test-stderr
@@ -44,4 +46,6 @@ jobs:
         uses: nick-fields/assert-action@v2
         with:
           actual: ${{ steps.test-stderr.outputs.stderr }}
-          expected: "test\ntest2"
+          expected: |
+            test
+            test2
