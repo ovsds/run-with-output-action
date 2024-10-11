@@ -20,7 +20,7 @@ jobs:
 
       - name: Test STDOUT
         id: test-stdout
-        uses: ./
+        uses: ovsds/run-with-output@{ github.ref }
         with:
           run: |
             echo "test"
