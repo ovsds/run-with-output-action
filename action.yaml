@@ -21,29 +21,9 @@ runs:
     - name: Run
       id: run
       shell: bash
-      run: |
-        {
-          IFS=$'\n' read -r -d '' CAPTURED_STDOUT;
-          IFS=$'\n' read -r -d '' CAPTURED_STDERR;
-        } < <((printf '\0%s\0' "$(({
-        ${{ inputs.run }}
-        } | tr -d '\0') 3>&1- 1>&2- 2>&3- | tr -d '\0')" 1>&2) 2>&1)
-
-        echo "stdout:"
-        echo "$CAPTURED_STDOUT"
-        {
-          echo "stdout<<EOF"
-          echo "$CAPTURED_STDOUT"
-          echo "EOF"
-        } >> "$GITHUB_OUTPUT"
-
-        echo "stderr:"
-        echo "$CAPTURED_STDERR"
-        {
-          echo "stderr<<EOF"
-          echo "$CAPTURED_STDERR"
-          echo "EOF"
-        } >> "$GITHUB_OUTPUT"
+      run: src/main.sh
+      env:
+        COMMAND: ${{ inputs.run }}
 
 branding:
   icon: "terminal"
