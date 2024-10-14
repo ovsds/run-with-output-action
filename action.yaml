@@ -21,7 +21,7 @@ runs:
     - name: Run
       id: run
       shell: bash
-      run: src/main.sh
+      run: ${{ github.action_path }}/src/main.sh
       env:
         COMMAND: ${{ inputs.run }}
 
