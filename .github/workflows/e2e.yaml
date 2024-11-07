@@ -8,18 +8,16 @@ on:
       - synchronize
 
 jobs:
-  e2e-default:
-    runs-on: ubuntu-20.04
+  e2e-stdout:
+    runs-on: ubuntu-latest
 
     permissions:
       contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Test STDOUT
-        id: test-stdout
+      - id: test
         uses: ./
         with:
           run: |
@@ -29,13 +27,21 @@ jobs:
       - name: Assert stdout
         uses: nick-fields/assert-action@v2
         with:
-          actual: ${{ steps.test-stdout.outputs.stdout }}
+          actual: ${{ steps.test.outputs.stdout }}
           expected: |
             test
             test2
 
-      - name: Test STDERR
-        id: test-stderr
+  e2e-stderr:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: test
         uses: ./
         with:
           run: |
@@ -45,7 +51,22 @@ jobs:
       - name: Assert stderr
         uses: nick-fields/assert-action@v2
         with:
-          actual: ${{ steps.test-stderr.outputs.stderr }}
+          actual: ${{ steps.test.outputs.stderr }}
           expected: |
             test
             test2
+
+  e2e:
+    runs-on: ubuntu-latest
+    if: always() && !cancelled()
+
+    needs:
+      - e2e-stdout
+      - e2e-stderr
+
+    steps:
+      - name: Collect Results
+        uses: ovsds/collect-needs-result-action@v1
+        with:
+          needs_json: ${{ toJson(needs) }}
+          skip_allowed: false
