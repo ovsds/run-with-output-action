@@ -72,12 +72,19 @@ jobs:
         uses: ./
         with:
           run: exit 1
+        continue-on-error: true
 
       - name: Assert exit code
         uses: nick-fields/assert-action@v2
         with:
           actual: ${{ steps.test.outputs.exit_code }}
           expected: 1
+
+      - name: Assert failure
+        uses: nick-fields/assert-action@v2
+        with:
+          actual: ${{ steps.test.outcome }}
+          expected: "failure"
 
   e2e:
     runs-on: ubuntu-latest
