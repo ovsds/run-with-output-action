@@ -35,6 +35,8 @@ function main() {
     set_output "stdout" "$stdout"
     set_output "stderr" "$stderr"
     set_output "exit_code" "$exit_code"
+
+    exit "$exit_code"
 }
 
 main "$@"
