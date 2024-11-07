@@ -58,7 +58,7 @@ jobs:
             test
             test2
 
-  e2e-error-code:
+  e2e-exit-code:
     runs-on: ubuntu-latest
 
     permissions:
@@ -93,7 +93,7 @@ jobs:
     needs:
       - e2e-stdout
       - e2e-stderr
-      - e2e-error-code
+      - e2e-exit-code
 
     steps:
       - name: Collect Results
