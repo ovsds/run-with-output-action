@@ -15,13 +15,19 @@ outputs:
     description: "Standard error of the command"
     value: ${{ steps.run.outputs.stderr }}
 
+  exit_code:
+    description: "Exit code of the command"
+    value: ${{ steps.run.outputs.exit_code }}
+
 runs:
   using: "composite"
   steps:
     - name: Run
       id: run
       shell: bash
-      run: ${{ github.action_path }}/src/main.sh
+      run: |
+        # Run the command
+        ${{ github.action_path }}/src/main.sh
       env:
         COMMAND: ${{ inputs.run }}
 
