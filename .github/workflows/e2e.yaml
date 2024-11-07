@@ -17,7 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - id: test
+      - name: Test
+        id: test
         uses: ./
         with:
           run: |
@@ -41,7 +42,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - id: test
+      - name: Test
+        id: test
         uses: ./
         with:
           run: |
@@ -56,6 +58,27 @@ jobs:
             test
             test2
 
+  e2e-error-code:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test
+        id: test
+        uses: ./
+        with:
+          run: exit 1
+
+      - name: Assert exit code
+        uses: nick-fields/assert-action@v2
+        with:
+          actual: ${{ steps.test.outputs.exit_code }}
+          expected: 1
+
   e2e:
     runs-on: ubuntu-latest
     if: always() && !cancelled()
@@ -63,6 +86,7 @@ jobs:
     needs:
       - e2e-stdout
       - e2e-stderr
+      - e2e-error-code
 
     steps:
       - name: Collect Results

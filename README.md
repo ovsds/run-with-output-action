@@ -32,10 +32,11 @@ Supports multiline commands and outputs.
 
 ### Action Outputs
 
-| Name     | Description                     |
-| -------- | ------------------------------- |
-| `stdour` | Standard output of the command. |
-| `stderr` | Standard error of the command.  |
+| Name         | Description                    |
+| ------------ | ------------------------------ |
+| `stdour`     | Standard output of the command |
+| `stderr`     | Standard error of the command  |
+| `error_code` | Exit code of the command       |
 
 ## Development
 

@@ -21,16 +21,20 @@ function main() {
         exit 1
     fi
 
-    # run the command and capture the output
-    {
-        IFS=$'\n' read -r -d '' CAPTURED_STDOUT;
-        IFS=$'\n' read -r -d '' CAPTURED_STDERR;
-    } < <((printf '\0%s\0' "$(({
-        eval "$COMMAND"
-    } | tr -d '\0') 3>&1- 1>&2- 2>&3- | tr -d '\0')" 1>&2) 2>&1)
+    stdout_file=$(mktemp)
+    stderr_file=$(mktemp)
 
-    set_output "stdout" "$CAPTURED_STDOUT"
-    set_output "stderr" "$CAPTURED_STDERR"
+    set +e
+    eval "$COMMAND" 1> "$stdout_file" 2> "$stderr_file" | true; exit_code=$?
+    stdout=$(cat "$stdout_file")
+    stderr=$(cat "$stderr_file")
+    set -e
+
+    rm -f "$stdout_file" "$stderr_file"
+
+    set_output "stdout" "$stdout"
+    set_output "stderr" "$stderr"
+    set_output "exit_code" "$exit_code"
 }
 
 main "$@"
