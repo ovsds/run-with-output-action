@@ -14,11 +14,14 @@ Supports multiline commands and outputs.
 ```yaml
 - name: Run with Output
   uses: ovsds/run-with-output-action@v1
+  env:
+    VALUE: "ENVIRONMENT_VARIABLE"
   with:
     run: |
       echo "Hello, World!"
       echo "Hello, World!" >&2
       echo "Hello, again!"
+      echo $VALUE
 
 - name: Use Output
   run: echo "${{ steps.run.outputs.stdout }}"
@@ -29,10 +32,9 @@ so it can cause unexpected behavior if not properly sanitized. NEVER use user in
 
 ### Action Inputs
 
-| Name        | Description                                    | Default |
-| ----------- | ---------------------------------------------- | ------- |
-| `run`       | Command to run.                                |         |
-| `envs_json` | JSON string with environment variables to set. | `{}`    |
+| Name  | Description     | Default |
+| ----- | --------------- | ------- |
+| `run` | Command to run. |         |
 
 ### Action Outputs
 
