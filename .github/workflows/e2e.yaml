@@ -126,6 +126,30 @@ jobs:
             value1
             value2
 
+  e2e-working-directory:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Test
+        id: test
+        uses: ./
+        with:
+          run: pwd
+          cwd: /tmp
+
+      - name: Assert stdout
+        uses: nick-fields/assert-action@v2
+        with:
+          actual: ${{ steps.test.outputs.stdout }}
+          expected: /tmp
+
   e2e:
     runs-on: ubuntu-latest
     if: always() && !cancelled()
