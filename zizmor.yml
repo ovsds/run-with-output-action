@@ -1,4 +1,4 @@
 rules:
   template-injection:
     ignore:
-      - action.yaml:30
+      - action.yaml:25

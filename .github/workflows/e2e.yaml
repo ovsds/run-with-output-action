@@ -110,15 +110,13 @@ jobs:
       - name: Test
         id: test
         uses: ./
+        env:
+          ENV1: value1
+          ENV2: value2
         with:
           run: |
             echo "$ENV1"
             echo "$ENV2"
-          envs_json: |
-            {
-              "ENV1": "value1",
-              "ENV2": "value2"
-            }
 
       - name: Assert stdout
         uses: nick-fields/assert-action@v2
