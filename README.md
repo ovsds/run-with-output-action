@@ -24,11 +24,15 @@ Supports multiline commands and outputs.
   run: echo "${{ steps.run.outputs.stdout }}"
 ```
 
+Command should be carefully set avoiding any potential security risks. `run` input is `eval`ed in shell,
+so it can cause unexpected behavior if not properly sanitized. NEVER use user input in `run` input.
+
 ### Action Inputs
 
-| Name  | Description     | Default |
-| ----- | --------------- | ------- |
-| `run` | Command to run. |         |
+| Name        | Description                                    | Default |
+| ----------- | ---------------------------------------------- | ------- |
+| `run`       | Command to run.                                |         |
+| `envs_json` | JSON string with environment variables to set. | `{}`    |
 
 ### Action Outputs
 
