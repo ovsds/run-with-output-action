@@ -96,6 +96,38 @@ jobs:
           actual: ${{ steps.test.outcome }}
           expected: "failure"
 
+  e2e-envs:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Test
+        id: test
+        uses: ./
+        with:
+          run: |
+            echo "$ENV1"
+            echo "$ENV2"
+          envs_json: |
+            {
+              "ENV1": "value1",
+              "ENV2": "value2"
+            }
+
+      - name: Assert stdout
+        uses: nick-fields/assert-action@v2
+        with:
+          actual: ${{ steps.test.outputs.stdout }}
+          expected: |
+            value1
+            value2
+
   e2e:
     runs-on: ubuntu-latest
     if: always() && !cancelled()
@@ -104,6 +136,7 @@ jobs:
       - e2e-stdout
       - e2e-stderr
       - e2e-exit-code
+      - e2e-envs
 
     steps:
       - name: Collect Results

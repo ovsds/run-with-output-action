@@ -6,6 +6,11 @@ inputs:
     description: "Command to run"
     required: true
 
+  envs_json:
+    description: "JSON string with environment variables to set."
+    required: false
+    default: "{}"
+
 outputs:
   stdout:
     description: "Standard output of the command"
@@ -27,9 +32,8 @@ runs:
       shell: bash
       run: |
         # Run the command
-        ${{ github.action_path }}/src/main.sh
-      env:
-        COMMAND: ${{ inputs.run }}
+        COMMAND='${{ inputs.run }}' ${{ github.action_path }}/src/main.sh #
+      env: ${{ fromJson(inputs.envs_json) }}
 
 branding:
   icon: "terminal"
