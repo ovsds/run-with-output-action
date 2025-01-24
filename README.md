@@ -32,9 +32,10 @@ so it can cause unexpected behavior if not properly sanitized. NEVER use user in
 
 ### Action Inputs
 
-| Name  | Description     | Default |
-| ----- | --------------- | ------- |
-| `run` | Command to run. |         |
+| Name  | Description                              | Default |
+| ----- | ---------------------------------------- | ------- |
+| `run` | Command to run.                          |         |
+| `cwd` | Working directory to run the command in. | `.`     |
 
 ### Action Outputs
 

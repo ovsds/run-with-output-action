@@ -6,6 +6,11 @@ inputs:
     description: "Command to run"
     required: true
 
+  cwd:
+    description: "Working directory"
+    required: false
+    default: "."
+
 outputs:
   stdout:
     description: "Standard output of the command"
@@ -23,6 +28,7 @@ runs:
   using: "composite"
   steps:
     - name: Run
+      working-directory: ${{ inputs.cwd }}
       id: run
       shell: bash
       run: |
