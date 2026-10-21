@@ -25,6 +25,8 @@ function main() {
     stderr_file=$(mktemp)
 
     set +e
+    # The pipe runs the command in a subshell, so its `exit` does not end this script; pipefail keeps its exit code
+    # shellcheck disable=SC2260
     eval "$COMMAND" 1> "$stdout_file" 2> "$stderr_file" | true; exit_code=$?
     stdout=$(cat "$stdout_file")
     stderr=$(cat "$stderr_file")
