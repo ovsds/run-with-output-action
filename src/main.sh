@@ -2,18 +2,8 @@
 
 set -euo pipefail
 
-function set_output() {
-    KEY=$1
-    VALUE=$2
-
-    echo "$KEY"
-    echo "$VALUE"
-    {
-        echo "$KEY<<EOF"
-        echo "$VALUE"
-        echo "EOF"
-    } >> "$GITHUB_OUTPUT"
-}
+# shellcheck source-path=SCRIPTDIR source=common.sh
+source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
 function main() {
     if [ -z "${COMMAND:-}" ]; then
