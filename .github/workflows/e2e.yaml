@@ -19,20 +19,21 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Test
         id: test
-        uses: ./
+        uses: $/
         with:
           run: |
             echo "test"
             echo "test2"
 
       - name: Assert stdout
-        uses: nick-fields/assert-action@v2
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           actual: ${{ steps.test.outputs.stdout }}
           expected: |
@@ -46,20 +47,21 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Test
         id: test
-        uses: ./
+        uses: $/
         with:
           run: |
             echo "test" 1>&2
             echo "test2" 1>&2
 
       - name: Assert stderr
-        uses: nick-fields/assert-action@v2
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           actual: ${{ steps.test.outputs.stderr }}
           expected: |
@@ -73,25 +75,26 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Test
         id: test
-        uses: ./
+        uses: $/
         with:
           run: exit 1
         continue-on-error: true
 
       - name: Assert exit code
-        uses: nick-fields/assert-action@v2
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           actual: ${{ steps.test.outputs.exit_code }}
           expected: 1
 
       - name: Assert failure
-        uses: nick-fields/assert-action@v2
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           actual: ${{ steps.test.outcome }}
           expected: "failure"
@@ -103,13 +106,14 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Test
         id: test
-        uses: ./
+        uses: $/
         env:
           ENV1: value1
           ENV2: value2
@@ -119,7 +123,7 @@ jobs:
             echo "$ENV2"
 
       - name: Assert stdout
-        uses: nick-fields/assert-action@v2
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           actual: ${{ steps.test.outputs.stdout }}
           expected: |
@@ -133,19 +137,20 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Test
         id: test
-        uses: ./
+        uses: $/
         with:
           run: pwd
           cwd: /tmp
 
       - name: Assert stdout
-        uses: nick-fields/assert-action@v2
+        uses: nick-fields/assert-action@0efd6166067d9c59d89c710fab4f79fb066f8985 # v4.0.1
         with:
           actual: ${{ steps.test.outputs.stdout }}
           expected: /tmp
@@ -154,15 +159,18 @@ jobs:
     runs-on: ubuntu-latest
     if: always() && !cancelled()
 
+    permissions: {}
+
     needs:
       - e2e-stdout
       - e2e-stderr
       - e2e-exit-code
       - e2e-envs
+      - e2e-working-directory
 
     steps:
       - name: Collect Results
-        uses: ovsds/collect-needs-result-action@v1
+        uses: ovsds/collect-needs-result-action@12190e2a1bfe85d9c024f190a3833973e97998f8 # v1.0.0
         with:
           needs_json: ${{ toJson(needs) }}
           skip_allowed: false

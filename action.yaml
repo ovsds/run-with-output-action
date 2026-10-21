@@ -33,7 +33,7 @@ runs:
       shell: bash
       run: |
         # Run the command
-        COMMAND='${{ inputs.run }}' ${{ github.action_path }}/src/main.sh #
+        COMMAND='${{ inputs.run }}' "${{ github.action_path }}/src/main.sh" #
 
 branding:
   icon: "terminal"
