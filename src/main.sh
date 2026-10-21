@@ -6,7 +6,7 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
 function main() {
-    if [ -z "${COMMAND:-}" ]; then
+    if [[ -z "${COMMAND:-}" ]]; then
         echo "ERROR: COMMAND is not set, exiting..." >&2
         exit 1
     fi
@@ -17,18 +17,18 @@ function main() {
     set +e
     # The pipe runs the command in a subshell, so its `exit` does not end this script; pipefail keeps its exit code
     # shellcheck disable=SC2260
-    eval "$COMMAND" 1> "$stdout_file" 2> "$stderr_file" | true; exit_code=$?
-    stdout=$(cat "$stdout_file")
-    stderr=$(cat "$stderr_file")
+    eval "${COMMAND}" 1> "${stdout_file}" 2> "${stderr_file}" | true; exit_code=$?
+    stdout=$(cat "${stdout_file}")
+    stderr=$(cat "${stderr_file}")
     set -e
 
-    rm -f "$stdout_file" "$stderr_file"
+    rm -f "${stdout_file}" "${stderr_file}"
 
-    set_output "stdout" "$stdout"
-    set_output "stderr" "$stderr"
-    set_output "exit_code" "$exit_code"
+    set_output "stdout" "${stdout}"
+    set_output "stderr" "${stderr}"
+    set_output "exit_code" "${exit_code}"
 
-    exit "$exit_code"
+    exit "${exit_code}"
 }
 
 main "$@"
