@@ -7,3 +7,9 @@
 
 # Dependencies
 node_modules/
+
+# Environment
+.env
+
+# Worktrees and working files
+/artifacts/
